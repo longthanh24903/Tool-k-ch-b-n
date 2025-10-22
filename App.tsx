@@ -3051,7 +3051,7 @@ const App: React.FC = () => {
           </div>
         </div>
       </header>
-      <main className="flex-grow grid grid-cols-1 lg:grid-cols-[450px_1fr] gap-6 p-6 mx-auto w-full xl:max-w-7xl">
+      <main className="flex-grow grid grid-cols-1 lg:grid-cols-[450px_1fr] gap-6 p-0 lg:p-6 mx-auto w-full xl:max-w-7xl">
         <aside className="lg:sticky lg:top-6 self-start">
           <div className="lg:max-h-[calc(100vh-6rem)] overflow-y-auto config-scrollbar">
             <ConfigPanel
