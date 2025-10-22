@@ -1,0 +1,5 @@
+{
+  "name": "Copy of Tool tạo kịch bản v-2",
+  "description": "A professional tool for writing long-form scripts. Users can input an idea, and the AI will write the story part-by-part, continuing from the previous section with each request. Features include genre selection, word count control, and various writing styles.",
+  "requestFramePermissions": []
+}

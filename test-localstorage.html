@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test localStorage</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #1a1a1a;
+        color: white;
+      }
+      .test-section {
+        background-color: #2a2a2a;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+      }
+      button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      .result {
+        background-color: #333;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        font-family: monospace;
+      }
+      .success {
+        color: #4caf50;
+      }
+      .error {
+        color: #f44336;
+      }
+      .warning {
+        color: #ff9800;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🔍 Test localStorage Functionality</h1>
+
+    <div class="test-section">
+      <h2>1. Basic localStorage Test</h2>
+      <button onclick="testBasic()">Test Basic localStorage</button>
+      <div id="basic-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>2. API Keys Test</h2>
+      <button onclick="testApiKeys()">Test API Keys Storage</button>
+      <div id="apikeys-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>3. Current localStorage Contents</h2>
+      <button onclick="showContents()">Show All Contents</button>
+      <div id="contents-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>4. Clear localStorage</h2>
+      <button onclick="clearStorage()" style="background-color: #f44336">
+        Clear All Data
+      </button>
+      <div id="clear-result" class="result"></div>
+    </div>
+
+    <script>
+      function log(message, type = "info") {
+        const timestamp = new Date().toLocaleTimeString();
+        const className =
+          type === "success"
+            ? "success"
+            : type === "error"
+            ? "error"
+            : type === "warning"
+            ? "warning"
+            : "";
+        return `<div class="${className}">[${timestamp}] ${message}</div>`;
+      }
+
+      function testBasic() {
+        const resultDiv = document.getElementById("basic-result");
+        resultDiv.innerHTML = "";
+
+        try {
+          // Test 1: Check if localStorage is available
+          if (typeof Storage === "undefined") {
+            resultDiv.innerHTML += log(
+              "❌ localStorage is not supported",
+              "error"
+            );
+            return;
+          }
+          resultDiv.innerHTML += log("✅ localStorage is supported", "success");
+
+          // Test 2: Write and read
+          const testKey = "test_key_" + Date.now();
+          const testValue = "test_value_" + Math.random();
+
+          localStorage.setItem(testKey, testValue);
+          resultDiv.innerHTML += log(
+            `✅ Written: ${testKey} = ${testValue}`,
+            "success"
+          );
+
+          const retrieved = localStorage.getItem(testKey);
+          if (retrieved === testValue) {
+            resultDiv.innerHTML += log(`✅ Retrieved: ${retrieved}`, "success");
+          } else {
+            resultDiv.innerHTML += log(
+              `❌ Mismatch: expected ${testValue}, got ${retrieved}`,
+              "error"
+            );
+          }
+
+          // Clean up
+          localStorage.removeItem(testKey);
+          resultDiv.innerHTML += log("✅ Cleaned up test data", "success");
+        } catch (e) {
+          resultDiv.innerHTML += log(`❌ Error: ${e.message}`, "error");
+        }
+      }
+
+      function testApiKeys() {
+        const resultDiv = document.getElementById("apikeys-result");
+        resultDiv.innerHTML = "";
+
+        try {
+          // Test API keys storage
+          const testKeys = ["test_key_1", "test_key_2", "test_key_3"];
+
+          localStorage.setItem("apiKeys", JSON.stringify(testKeys));
+          resultDiv.innerHTML += log(
+            `✅ Stored API keys: ${testKeys.length} keys`,
+            "success"
+          );
+
+          const retrieved = localStorage.getItem("apiKeys");
+          const parsedKeys = JSON.parse(retrieved);
+
+          if (
+            Array.isArray(parsedKeys) &&
+            parsedKeys.length === testKeys.length
+          ) {
+            resultDiv.innerHTML += log(
+              `✅ Retrieved API keys: ${parsedKeys.length} keys`,
+              "success"
+            );
+            resultDiv.innerHTML += log(
+              `Keys: ${parsedKeys.join(", ")}`,
+              "info"
+            );
+          } else {
+            resultDiv.innerHTML += log(`❌ API keys mismatch`, "error");
+          }
+
+          // Test current index
+          localStorage.setItem("currentApiKeyIndex", JSON.stringify(1));
+          const retrievedIndex = localStorage.getItem("currentApiKeyIndex");
+          const parsedIndex = JSON.parse(retrievedIndex);
+
+          if (parsedIndex === 1) {
+            resultDiv.innerHTML += log(
+              `✅ Current index stored and retrieved: ${parsedIndex}`,
+              "success"
+            );
+          } else {
+            resultDiv.innerHTML += log(
+              `❌ Index mismatch: expected 1, got ${parsedIndex}`,
+              "error"
+            );
+          }
+
+          // Test auto switch
+          localStorage.setItem("autoSwitchKey", JSON.stringify(true));
+          const retrievedAutoSwitch = localStorage.getItem("autoSwitchKey");
+          const parsedAutoSwitch = JSON.parse(retrievedAutoSwitch);
+
+          if (parsedAutoSwitch === true) {
+            resultDiv.innerHTML += log(
+              `✅ Auto switch stored and retrieved: ${parsedAutoSwitch}`,
+              "success"
+            );
+          } else {
+            resultDiv.innerHTML += log(
+              `❌ Auto switch mismatch: expected true, got ${parsedAutoSwitch}`,
+              "error"
+            );
+          }
+        } catch (e) {
+          resultDiv.innerHTML += log(`❌ Error: ${e.message}`, "error");
+        }
+      }
+
+      function showContents() {
+        const resultDiv = document.getElementById("contents-result");
+        resultDiv.innerHTML = "";
+
+        try {
+          if (localStorage.length === 0) {
+            resultDiv.innerHTML += log("ℹ️ localStorage is empty", "warning");
+            return;
+          }
+
+          resultDiv.innerHTML += log(
+            `📦 localStorage contains ${localStorage.length} items:`,
+            "info"
+          );
+
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            const value = localStorage.getItem(key);
+            resultDiv.innerHTML += log(`  ${key}: ${value}`, "info");
+          }
+        } catch (e) {
+          resultDiv.innerHTML += log(`❌ Error: ${e.message}`, "error");
+        }
+      }
+
+      function clearStorage() {
+        const resultDiv = document.getElementById("clear-result");
+        resultDiv.innerHTML = "";
+
+        try {
+          const count = localStorage.length;
+          localStorage.clear();
+          resultDiv.innerHTML += log(
+            `✅ Cleared ${count} items from localStorage`,
+            "success"
+          );
+
+          setTimeout(() => {
+            resultDiv.innerHTML += log("ℹ️ localStorage is now empty", "info");
+          }, 100);
+        } catch (e) {
+          resultDiv.innerHTML += log(`❌ Error: ${e.message}`, "error");
+        }
+      }
+
+      // Auto-run basic test on load
+      window.onload = function () {
+        testBasic();
+      };
+    </script>
+  </body>
+</html>
