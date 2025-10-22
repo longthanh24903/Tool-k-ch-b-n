@@ -298,7 +298,7 @@ const ConfigPanel: React.FC<ConfigPanelProps> = ({
   };
 
   return (
-    <div className="p-6 bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-lg h-auto flex flex-col">
+    <div className="p-4 lg:p-6 bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-lg h-auto flex flex-col">
       <h2 className="text-2xl font-bold mb-6 text-indigo-400 font-sans">
         Cấu hình Kịch bản
       </h2>
@@ -923,7 +923,7 @@ const ScriptDisplay: React.FC<ScriptDisplayProps> = ({
 
   if (!outline && script.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full text-center p-8 text-gray-400">
+      <div className="flex items-center justify-center h-full text-center px-4 py-8 lg:p-8 text-gray-400">
         <div>
           <h3 className="text-2xl font-bold font-sans">
             Chào mừng đến với AI Script Writer Pro
@@ -3051,7 +3051,7 @@ const App: React.FC = () => {
           </div>
         </div>
       </header>
-      <main className="flex-grow grid grid-cols-1 lg:grid-cols-[450px_1fr] gap-6 p-0 lg:p-6 mx-auto w-full xl:max-w-7xl">
+      <main className="flex-grow grid grid-cols-1 lg:grid-cols-[450px_1fr] gap-6 pb-10 lg:p-6 mx-auto w-full xl:max-w-7xl">
         <aside className="lg:sticky lg:top-6 self-start">
           <div className="lg:max-h-[calc(100vh-6rem)] overflow-y-auto config-scrollbar">
             <ConfigPanel
